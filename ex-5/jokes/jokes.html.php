@@ -26,6 +26,11 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/includes/helpers.inc.php';
                     </p>
                 </blockquote>
             </form>
-        <?php endforeach; ?> 
+        <?php endforeach; ?>
+        <p>
+            <a href="..">
+                Вернуться на главную страницу
+            </a>
+        </p> 
     </body>
 </html>

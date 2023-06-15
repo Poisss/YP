@@ -16,7 +16,7 @@
         }
         catch(PDOException $e){
             $error='Ошибка при добавлении шутки: '.$e->getMessage();
-            include 'error.html.php';
+            include $_SERVER['DOCUMENT_ROOT'].'/includes/error.html.php';
             exit();
         }
         header('Location: .');
@@ -32,7 +32,7 @@
         }
         catch(PDOException $e){
             $error='Ошибка при удалении шутки: '.$e->getMessage();
-            include 'error.html.php';
+            include $_SERVER['DOCUMENT_ROOT'].'/includes/error.html.php';
             exit();
         }
         header('Location: .');
@@ -45,7 +45,7 @@
     }
     catch(PDOException $e){
         $error='Ошибка извлечении шуток: '. $e->getMessage();
-        include 'error.html.php';
+        include $_SERVER['DOCUMENT_ROOT'].'/includes/error.html.php';
         exit();
     }
     while($row = $result->fetch()){
@@ -56,5 +56,5 @@
             'email' => $row['email']);
     }
     include 'jokes.html.php';
-    include 'samplepage.html.php';
+    include $_SERVER['DOCUMENT_ROOT'].'/includes/footer.inc.html.php';
 ?>
