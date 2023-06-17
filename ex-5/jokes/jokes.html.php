@@ -6,31 +6,47 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/includes/helpers.inc.php';
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title>Управление шутками: результат поиска</title>
     </head>
     <body>
-        <p><a href="?addjoke">Добавить собственную шутку</a></p>
-        <p>Все шутки, которые есть в базе данных:</p>
-        <?php foreach($jokes as $joke):?>
-            <form action="?deletejoke" method="post">
-                <blockquote>
-                    <p>
-                        <?php
-                        echo htmlout($joke['text']);
-                        ?>
-                        <input type="hidden" name='id' value="<?php echo $joke['id'];?>">
-                        <input type="submit" value="Удалить">
-                        (автор <a href="mailto:<?php 
-                        echo htmlout($joke['email']); ?>">
-                        <?php echo htmlout($joke['name']); ?></a>)
-                    </p>
-                </blockquote>
-            </form>
-        <?php endforeach; ?>
+        <h1>Результаты поиска</h1>
+        <?php if(isset($jokes)):?>
+            <table>
+                <tr>
+                    <th>
+                        Текст шутки
+                    </th>
+                    <th>
+                        Действие
+                    </th>
+                </tr>
+                <?php foreach($jokes as $joke):?>
+                    <tr>
+                        <td>
+                        <?php markdownhtml($joke['text']);?>
+                        </td>
+                        <th>
+                            <form action="?" method="post">
+                                <div>
+                                    <input type="hidden" name="id" value="<?php htmlout($joke['id']);?>">
+                                    <input type="submit" name="action" value="Редактировать">
+                                    <input type="submit" name="action" value="Удалить">
+                                </div>
+                            </form>
+                        </th>
+                    </tr>
+                <?php endforeach; ?>    
+            </table>
+        <?php endif; ?>
+        <p>
+            <a href="?">
+                Искать заново
+            </a>
+        </p>
         <p>
             <a href="..">
                 Вернуться на главную страницу
             </a>
-        </p> 
+        </p>
     </body>
 </html>

@@ -52,6 +52,27 @@ if(isset($_POST['action']) and $_POST['action']=='Редактировать'){
     include 'form.html.php';
     exit();
 }
+if(isset($_POST['action']) and $_POST['action']=='Обновить информация об авторе'){
+    include $_SERVER['DOCUMENT_ROOT'].'/includes/db.inc.php';
+    try{
+            $sql='UPDATE author SET
+            name = :name,
+            email = :email
+            WHERE id = :id';
+            $s=$pdo->prepare($sql);
+            $s->bindValue(':id',$_POST['id']);
+            $s->bindValue(':name',$_POST['name']);
+            $s->bindValue(':email',$_POST['email']);
+            $s->execute();
+    }
+    catch(PDOException $e){
+        $error='Ошибка при обновлении записи об авторе: '.$e->getMessage();
+        include $_SERVER['DOCUMENT_ROOT'].'/includes/error.html.php';
+        exit();
+    }
+    header('Location: .');
+    exit();
+}
 if(isset($_POST['action']) and $_POST['action']=='Удалить'){
     include $_SERVER['DOCUMENT_ROOT'].'/includes/db.inc.php'; 
     try{
