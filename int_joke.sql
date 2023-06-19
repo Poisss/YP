@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3307
--- Время создания: Июн 16 2023 г., 17:05
+-- Время создания: Июн 19 2023 г., 11:16
 -- Версия сервера: 8.0.30
 -- Версия PHP: 8.1.9
 
@@ -30,17 +30,36 @@ SET time_zone = "+00:00";
 CREATE TABLE `author` (
   `id` int NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL
+  `email` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` char(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `author`
 --
 
-INSERT INTO `author` (`id`, `name`, `email`) VALUES
-(1, 'Светов Павел', 'svetov.p@mail.ru'),
-(2, 'Лукин Иван', 'lukin.i@yandex.ru'),
-(7, 'fefef123', 'fefe@fggf');
+INSERT INTO `author` (`id`, `name`, `email`, `password`) VALUES
+(1, 'Светов Павел', 'svetov.p@mail.ru', 'ed03ab85c582da705d2d48d7862816dd'),
+(2, 'Лукин Иван', 'lukin.i@yandex.ru', 'ed03ab85c582da705d2d48d7862816dd'),
+(7, 'fefef123', 'fefe@fggf', 'ed03ab85c582da705d2d48d7862816dd');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `authorrole`
+--
+
+CREATE TABLE `authorrole` (
+  `authorid` int NOT NULL,
+  `roleid` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Дамп данных таблицы `authorrole`
+--
+
+INSERT INTO `authorrole` (`authorid`, `roleid`) VALUES
+(1, 'Администратор учетных записей');
 
 -- --------------------------------------------------------
 
@@ -105,6 +124,26 @@ INSERT INTO `jokecategory` (`jokeid`, `categoryid`) VALUES
 (1, 2),
 (4, 3);
 
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `role`
+--
+
+CREATE TABLE `role` (
+  `id` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Дамп данных таблицы `role`
+--
+
+INSERT INTO `role` (`id`, `description`) VALUES
+('Администратор сайта', 'Добавление, удаление и редактирование категорий'),
+('Администратор учетных записей', 'Добавление, удаление и редактирование авторов'),
+('Редактор', 'Добавление, удаление и редактирование шуток');
+
 --
 -- Индексы сохранённых таблиц
 --
@@ -113,7 +152,15 @@ INSERT INTO `jokecategory` (`jokeid`, `categoryid`) VALUES
 -- Индексы таблицы `author`
 --
 ALTER TABLE `author`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Индексы таблицы `authorrole`
+--
+ALTER TABLE `authorrole`
+  ADD PRIMARY KEY (`authorid`,`roleid`),
+  ADD KEY `roleid` (`roleid`);
 
 --
 -- Индексы таблицы `category`
@@ -136,6 +183,12 @@ ALTER TABLE `jokecategory`
   ADD KEY `categoryid` (`categoryid`);
 
 --
+-- Индексы таблицы `role`
+--
+ALTER TABLE `role`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT для сохранённых таблиц
 --
 
@@ -155,11 +208,18 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT для таблицы `joke`
 --
 ALTER TABLE `joke`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
+
+--
+-- Ограничения внешнего ключа таблицы `authorrole`
+--
+ALTER TABLE `authorrole`
+  ADD CONSTRAINT `authorrole_ibfk_1` FOREIGN KEY (`authorid`) REFERENCES `author` (`id`),
+  ADD CONSTRAINT `authorrole_ibfk_2` FOREIGN KEY (`roleid`) REFERENCES `role` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `joke`
